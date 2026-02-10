@@ -1,5 +1,26 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Cost (OpenAI Realtime API)
+
+This app uses the **gpt-realtime** model plus **gpt-4o-transcribe** for Dutch input. Billing is per token; exact numbers depend on session length and usage.
+
+**Rough rates (per 1M tokens):**
+
+| Type            | Rate   |
+|-----------------|--------|
+| Audio input     | $32    |
+| Audio output    | $64    |
+| Text input      | $4     |
+| Text output     | $16    |
+| Input transcription | ~$0.006/min (gpt-4o-transcribe) |
+
+**Sample math:** User audio is **1 token per 100 ms**. So:
+
+- **1 minute of Dutch speech** ≈ 600 audio input tokens → 600 × ($32/1,000,000) ≈ **$0.02** (audio) + ~**$0.006** (transcription). Translation text adds a few cents (e.g. 50 words ≈ 70 tokens × $16/1M ≈ $0.001).
+- **10 minutes** → on the order of **~$0.25–0.35** (audio + transcription + translation text; no TTS).
+
+So for **text-only translation** (no spoken English output), expect on the order of **~$0.02–0.04 per minute** of continuous speech. Check [OpenAI Pricing](https://platform.openai.com/docs/pricing) for current numbers.
+
 ## Getting Started
 
 First, run the development server:
