@@ -45,7 +45,6 @@ CRITICAL RULES:
 - NEVER invent or guess. If you heard "Groene kraag" output "Green collar", NOT "Good evening". If you heard "Dankuwel" output "Thank you". If you heard "Tot ziens" output "Goodbye". If you heard "Maak een grap" output "Make a joke."
 - NEVER output greetings like "Good evening", "Hello", "How are you" unless the user actually said the Dutch equivalent (e.g. "Goedenavond", "Hallo").
 - Output ONLY the English translation of what was just said. No extra words, no politeness phrases unless they were in the Dutch.`,
-          turn_detection: null,
           audio: {
             input: {
               transcription: {
