@@ -32,14 +32,53 @@ function extractTextFromObj(obj: unknown): string {
 
 const API_KEY_STORAGE_KEY = "live-translation-openai-api-key";
 
+const SOURCE_LANGUAGES: { code: string; name: string }[] = [
+  { code: "nl", name: "Dutch" },
+  { code: "en", name: "English" },
+  { code: "de", name: "German" },
+  { code: "fr", name: "French" },
+  { code: "es", name: "Spanish" },
+  { code: "it", name: "Italian" },
+  { code: "pt", name: "Portuguese" },
+  { code: "ru", name: "Russian" },
+  { code: "ja", name: "Japanese" },
+  { code: "ko", name: "Korean" },
+  { code: "zh", name: "Chinese" },
+  { code: "ar", name: "Arabic" },
+  { code: "hi", name: "Hindi" },
+  { code: "tr", name: "Turkish" },
+  { code: "pl", name: "Polish" },
+  { code: "uk", name: "Ukrainian" },
+  { code: "vi", name: "Vietnamese" },
+  { code: "th", name: "Thai" },
+  { code: "sv", name: "Swedish" },
+  { code: "no", name: "Norwegian" },
+  { code: "da", name: "Danish" },
+  { code: "fi", name: "Finnish" },
+  { code: "el", name: "Greek" },
+  { code: "he", name: "Hebrew" },
+  { code: "id", name: "Indonesian" },
+  { code: "ms", name: "Malay" },
+  { code: "cs", name: "Czech" },
+  { code: "ro", name: "Romanian" },
+  { code: "hu", name: "Hungarian" },
+  { code: "sk", name: "Slovak" },
+  { code: "hr", name: "Croatian" },
+  { code: "ca", name: "Catalan" },
+  { code: "is", name: "Icelandic" },
+];
+
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "connecting" | "active" | "error">("idle");
   const [apiKey, setApiKey] = useState("");
   const [saveApiKey, setSaveApiKey] = useState(false);
+  const [sourceLanguage, setSourceLanguage] = useState("nl");
   const [nlSegments, setNlSegments] = useState<Segment[]>([]);
   const [enSegments, setEnSegments] = useState<Segment[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [autoScroll, setAutoScroll] = useState(true);
+
+  const sourceLanguageName = SOURCE_LANGUAGES.find((l) => l.code === sourceLanguage)?.name ?? "Source";
 
   useEffect(() => {
     try {
@@ -262,7 +301,7 @@ export default function Home() {
       const tokenRes = await fetchWithTimeout("/api/realtime/token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ api_key: keyToUse }),
+        body: JSON.stringify({ api_key: keyToUse, language: sourceLanguage }),
         timeout: FETCH_TIMEOUT_MS,
       });
       const tokenData = await tokenRes.json();
@@ -325,7 +364,7 @@ export default function Home() {
         setErrorMessage("Failed to start");
       }
     }
-  }, [handleMessage, fetchWithTimeout, apiKey, saveApiKey]);
+  }, [handleMessage, fetchWithTimeout, apiKey, saveApiKey, sourceLanguage]);
 
   const stop = useCallback(() => {
     dcRef.current?.close();
@@ -356,8 +395,24 @@ export default function Home() {
             Live Translation
           </h1>
           {status === "idle" && (
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+              <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:flex-wrap">
+                <label className="sr-only" htmlFor="source-language">
+                  Source language
+                </label>
+                <select
+                  id="source-language"
+                  value={sourceLanguage}
+                  onChange={(e) => setSourceLanguage(e.target.value)}
+                  className="rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 text-sm focus:border-[var(--foreground)] focus:outline-none"
+                  aria-label="Source language"
+                >
+                  {SOURCE_LANGUAGES.map(({ code, name }) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
                 <label className="sr-only" htmlFor="api-key">
                   OpenAI API key
                 </label>
@@ -423,7 +478,7 @@ export default function Home() {
           <section className="flex flex-1 flex-col border-r border-[var(--border)]">
             <div className="shrink-0 border-b border-[var(--border)] px-6 py-3">
               <span className="text-sm font-medium text-[var(--text-secondary)]">
-                Dutch
+                {sourceLanguageName}
               </span>
             </div>
             <div
@@ -434,7 +489,7 @@ export default function Home() {
               <div className="mx-auto max-w-2xl space-y-4">
                 {nlSegments.length === 0 && status === "idle" && (
                   <p className="text-[22px] leading-[1.6] text-[var(--text-muted)]">
-                    Press Start to begin. Speak in Dutch.
+                    Press Start to begin. Speak in {sourceLanguageName}.
                   </p>
                 )}
                 {nlSegments.length === 0 && status === "active" && (
