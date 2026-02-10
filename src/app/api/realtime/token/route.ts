@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 const STORED_KEY_NAME = "OPENAI_API_KEY";
 
 const ALLOWED_LANGUAGE_CODES = new Set([
-  "ar", "ca", "zh", "hr", "cs", "da", "nl", "en", "fi", "fr", "de", "el", "he", "hi", "hu", "is", "id", "it", "ja", "ko", "ms", "no", "pl", "pt", "ro", "ru", "sk", "es", "sv", "th", "tr", "uk", "vi",
+  "ar", "ca", "zh", "hr", "cs", "da", "nl", "en", "fi", "fr", "de", "el", "he", "hi", "hu", "is", "id", "it", "ja", "ko", "ms", "no", "pl", "pt", "ro", "ru", "sr", "sk", "es", "sv", "th", "tr", "uk", "vi",
 ]);
 
 function getInstructions(langCode: string): string {

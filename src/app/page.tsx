@@ -34,8 +34,9 @@ const API_KEY_STORAGE_KEY = "live-translation-openai-api-key";
 
 const SOURCE_LANGUAGES: { code: string; name: string }[] = [
   { code: "nl", name: "Dutch" },
-  { code: "en", name: "English" },
+  { code: "sr", name: "Serbian" },
   { code: "de", name: "German" },
+  { code: "en", name: "English" },
   { code: "fr", name: "French" },
   { code: "es", name: "Spanish" },
   { code: "it", name: "Italian" },
